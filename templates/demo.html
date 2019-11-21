@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>this is demo</h1>
+<h3>hello {{name}}</h3>
+<h2>{{url_str}}</h2>
+<!--变量代码块-->
+<hr>
+{{ mylist[1]}}
+<br>
+{{ mydict['name']}}
+</body>
+<!--控制代码块-->
+<br>
+{% for my in mylist%}
+<br>
+    {%if my>3%}
+        {{my}}
+    {%endif%}
+{%endfor%}
+
+<!--过滤器-->
+<br>
+{{url_str| upper}}
+</html>
+
+<script></script>

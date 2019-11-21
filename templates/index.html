@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!--{{name}}-->
+<!--if循环-->
+
+{% if name %}
+    hello {{ name }}!
+{% else %}
+    hello Stranger!
+{% endif %}
+
+<!--宏定义-->
+{% macro render_comment(comment)%}
+    <li>{{comment}}</li>
+{% endmacro %}
+
+<ul>
+    {% for comment in comments %}
+        {{render_comment(comment)}}
+    {% endfor %}
+</ul>
+
+{% extends "base.html" %}
+{% block title%}index{% endblock %}
+{% block head%}
+    {{super()}}
+<style></style>
+{% endblock %}
+{% block body%}
+<h1>hello world</h1>
+{% endblock %}
+</body>
+</html>

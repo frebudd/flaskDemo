@@ -1,0 +1,82 @@
+#leftNav{
+    position: fixed;
+    top: 200px;
+    left: 170px;
+    font-size: 18px;
+        }
+#myfrom{
+    width: 250px;
+    position: fixed;
+    top: 200px;
+    right: 100px;
+        }
+#myCarousel{
+    width:600px;
+    height:350px;
+    margin: 0 auto;
+    display: flex;
+    flex-flow:row nowrap ;
+    font-size: 20px;
+    align-items: center;
+    }
+#userInfomation{
+    width: 250px;
+    position: fixed;
+    top: 200px;
+    right: 100px;
+    }
+#userInfomation div{
+    display: flex;
+    justify-content: center;
+}
+
+#pho{
+    width: 600px;
+    min-height: 300px;
+    height: fit-content;
+    margin: 0 auto;
+    }
+.photo{
+    display: none;
+        width: 600px;
+    min-height: 300px;
+    height: fit-content;
+    margin: 0 auto;
+}
+.article{
+    display: none;
+        width: 600px;
+    min-height: 300px;
+    height: fit-content;
+    margin: 0 auto;
+}
+.music{
+    display: none;
+        width: 600px;
+    min-height: 300px;
+    height: fit-content;
+    margin: 0 auto;
+}
+.operation{
+    display: flex;
+    justify-content: space-between;
+}
+
+#article_cont {
+  font-size: 18px;
+  line-height: 1.5; /* 1.5 * 18 = 27px */
+  height: 15em; /* 18 * 3 = 54px */
+  padding-right: 1em; /* 给元素一个1em的右内边距, 这个时候文字会稍微被挤到左边 */
+  margin-right: -0.5em; /* 添加负的外边距离，修复文字被挤到左边的差值 */
+  position: relative;
+  overflow: hidden;
+}
+
+/* 把...定位到容器的右下角 ----- */
+#article_cont::after {
+  content: '...';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

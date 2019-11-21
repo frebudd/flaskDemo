@@ -1,0 +1,27 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}sb{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+    <script>
+    $(document).ready(function () {
+        $("button").click(function () {
+            $.ajax({url:"static/photo-zhihu/15.jpg",success:function (result) {
+                    console.log(result)
+                    $("#div1").html("<img src=\"static/photo-zhihu/15.jpg\" alt=\"\" id=\"photo\">")
+                }})
+        })
+    })
+</script>
+{% endblock %}
+
+{% block content %}
+<img src="{{ url_for('static',filename='photo-zhihu/1.jpg') }}" alt="" width="200px">
+<a href="{{ url_for('photo') }}">图片</a>
+{% if photo %}
+1111111
+{% endif %}
+<div id="div1"><h2>使用 jQuery AJAX 修改文本内容</h2></div>
+    <img src="#" alt="" id="photo">
+<button>获取其他内容</button>
+{% endblock %}

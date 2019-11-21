@@ -1,0 +1,143 @@
+{% extends "navBase.html" %}
+
+
+{% block content %}
+    <div style="width:150px;height: 300px;float: left;">
+    <div id="leftNav" style="margin-left: 100px;margin-top: 50px;width: fit-content">
+<ul class="nav nav-pills nav-stacked" style="width: 150px">
+	<li id="user_publish"><a href="#">发布</a></li>
+	<li id="publish_music"><a href="#" id="article">我的发布-音乐</a></li>
+	<li id="publish_photo"><a href="#" id="photo">我的发布-图片</a></li>
+	<li id="publish_article"><a href="#" id="music">我的发布-文章</a></li>
+</ul>
+</div>
+    </div>
+    <div style="width: calc(100% - 150px);min-height: 300px;float: left;flex-flow: column nowrap;justify-content: center">
+    {#    消息提示栏#}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-info alert-dismissable" style="width: 600px;margin: 0 auto;">
+            {{ message }}
+            {{ form.error }}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            </button>
+
+        </div>
+    {% endfor %}
+
+    <div style="width: 600px;height: 300px;margin: 0 auto;text-align: center">
+
+        <div class="user_publish" style="display: none">
+            <form method="post" enctype="multipart/form-data">
+            {{ form.csrf_token() }}
+                <h3>请选择要发布的照片：</h3>
+            <div class="form-group">
+                {{ form.file() }}
+            </div>
+            <div class="form-group">
+                <input type="submit" class="form-control " value="发布">
+            </div>
+
+            <h3>请选择要发布的文章：</h3>
+             <div class="form-group">
+                {{ form.file_article }}
+            </div>
+            <div class="form-group">
+                <input type="submit" class="form-control" value="发布">
+            </div>
+
+            <h3>请选择要发布的音乐：</h3>
+            <div class="form-group">
+                {{ form.file_music }}
+            </div>
+            <div class="form-group">
+                <input type="submit" class="form-control" value="发布">
+            </div>
+        </form>
+        </div>
+
+        <div class="user_photo" style="display: none">
+            {% for phoAddr in phoAddrs %}
+                <div class="well">
+
+                <img src="{{ phoAddr['phoAddr'] }}" style="width: 100%">
+                <div>{{ phoAddr['createDate'] }}</div>
+                <button class="btn" key_id="{{ phoAddr['id'] }}" btn_type="photo">delete</button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="user_music" style="display: none">
+            {% for music in music_addr %}
+                <div class="well">
+                <div>{{ music['music_title'] }}</div>
+                <audio controls><source src="{{ music['musAddr'] }}"></audio>
+                <div>{{ music['createDate'] }}</div>
+                <button class="btn" key_id="{{ music['id'] }}" btn_type="music">delete</button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="user_article" style="display: none">
+            {% for art in article %}
+                <div class="well">
+                <div>{{ art['art_cont'] }}</div>
+                <p>{{ art['art_addr'] }}</p>
+                <div>{{art['createDate'] }}</div>
+                <button class="btn" key_id="{{ art['id'] }}" btn_type="article">delete</button>
+            </div>
+            {% endfor %}
+        </div>
+</div>
+
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+
+    $(document).ready(function () {
+        $("#user_publish").click(function (){
+
+            $(".user_publish").css('display','block')
+            $(".user_article").css('display','none')
+            $(".user_music").css('display','none')
+            $(".user_photo").css('display','none')
+        })
+
+        $("#publish_article").click(function (){
+            $(".user_publish").css('display','none')
+            $(".user_article").css('display','block')
+            $(".user_music").css('display','none')
+            $(".user_photo").css('display','none')
+        })
+
+        $("#publish_photo").click(function (){
+            $(".user_publish").css('display','none')
+            $(".user_article").css('display','none')
+            $(".user_music").css('display','none')
+            $(".user_photo").css('display','block')
+        })
+
+        $("#publish_music").click(function (){
+            $(".user_publish").css('display','none')
+            $(".user_article").css('display','none')
+            $(".user_music").css('display','block')
+            $(".user_photo").css('display','none')
+        })
+
+        $(document).on('click','.btn',function () {
+            console.log($(this).attr('btn_type'))
+            $.ajax({
+                url:'/user_delete_obj/'+$(this).attr('btn_type')+'/'+$(this).attr('key_id'),
+                type:'POST',
+                success:function (result) {
+                console.log(result)
+                window.location.reload()
+            }
+        })
+    })
+    })
+
+    </script>
+{% endblock %}

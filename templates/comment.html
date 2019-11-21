@@ -1,0 +1,240 @@
+{% extends "navbase.html" %}
+{% block title %}
+    Comment
+{% endblock %}
+
+{% block content %}
+{#    显示要评论的图片#}
+    {% if  pic %}
+        <div class="pic" style="width: 600px;margin: 0 auto">
+        <div class="well">
+            <img src="{{ pic }}" alt="" style="width: 100%">
+        </div>
+    </div>
+    {% endif %}
+
+{#    显示要评论的文章#}
+    {% if cont %}
+        <div class="article" style="width: 600px;margin: 0 auto;text-align: center">
+        <div class="well">
+            <p>{{ article_name }}</p>
+            <p style="width: 100%;">
+                {{ cont }}
+            </p>
+        </div>
+        </div>
+    {% endif %}
+
+    {#    显示要评论的音乐#}
+    {% if  cmt_music %}
+        <div class="pic" style="width: 600px;margin: 0 auto;text-align: center">
+        <div class="well">
+            <p>{{ cmt_music_name }}</p>
+            <audio controls>
+                <source src="{{ cmt_music }}">
+            </audio>
+        </div>
+    </div>
+    {% endif %}
+{#用户登录的情况下显示表单输入评论#}
+    {% if session['username'] %}
+    <div class="addCmt" style="width: 600px;margin: 0 auto">请添加您的评论：
+        <form method="post"  role="form" enctype="multipart/form-data">
+        {{ form.csrf_token() }}
+        {{ form.textarea(class="form-control",style='resize:none') }}
+        {{ form.mysubmit(class="form-control") }}
+        </form>
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    </div>
+    {% endif %}
+
+{#    展示用户评论#}
+    <div class="showCmt"  style="width: 600px;margin: 0 auto;height: 400px">
+    </div>
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{#    <script src="/static/js/myJs.js"></script>#}
+
+{#    如果存在用户照片评论 则显示照片评论#}
+    {% if picId %}
+    <script>
+    $(document).ready(function(){
+        var page=0
+        $(window).scroll(function () {
+            if ($(window).scrollTop()==($(document).height() - $(window).height()))
+            {
+                $.ajax({
+                    url:'/get_cmt/'+{{ picId }},
+                    type:'POST',
+                    data:JSON.stringify({"page":page}),
+                    success:function (result) {
+                        console.log(result,page)
+                        if (result!=''){
+                            page+=5
+                        console.log(this.url)
+                        var cmt = JSON.parse(result)
+                        console.log(cmt)
+                        var contain=''
+                        for(var el in cmt){
+                            contain+=`<div class="media">
+<div class="media-left">
+<img src=${cmt[el].com_icon} style="width:100px;height:100px">
+</div>
+<div class="media-body">
+    <div class="name" style="margin-bottom:20px">${cmt[el].com_name}</div>
+    <div class="show" style="margin-bottom:20px">${cmt[el].cmt_cont}</div>
+    <div class="date">${cmt[el].date}</div>
+</div>
+</div>`
+                if (cmt[el].cmt_user=="{{ session['username'] }}")
+                {
+                    contain+=`<button class='delete_cmt_pic btn btn-default' key='${cmt[el].id}'>删除评论</button>`
+                }
+                        }
+                        }
+                        $('.showCmt').append(contain);
+                    }
+                })
+            }
+        })
+
+            $(document).on('click', '.delete_cmt_pic', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete_cmt/',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key'),"obj_type":"pic"}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+    })
+    </script>
+    {% endif %}
+
+{#    如果存在用户文章评论则显示文章评论#}
+    {% if articleId%}
+            <script>
+    $(document).ready(function(){
+        var page=0
+        $(window).scroll(function () {
+            if ($(window).scrollTop()==($(document).height() - $(window).height()))
+            {
+                $.ajax({
+                    url:'/get_cmt_article/'+{{ articleId }},
+                    type:'POST',
+                    data:JSON.stringify({"page":page}),
+                    success:function (result) {
+                        console.log(result,page)
+                        if (result!=''){
+                            page+=5
+                        console.log(this.url)
+                        var cmt = JSON.parse(result)
+                        console.log(cmt)
+                        var contain=''
+                        for(var el in cmt){
+                            contain+=`<div class="media">
+<div class="media-left">
+<img src=${cmt[el].com_icon} style="width:100px;height:100px">
+</div>
+<div class="media-body">
+    <div class="name" style="margin-bottom:20px">${cmt[el].com_name}</div>
+    <div class="show" style="margin-bottom:20px">${cmt[el].cmt_cont}</div>
+    <div class="date">${cmt[el].date}</div>
+</div>
+</div>`
+                            if (cmt[el].cmt_user=="{{ session['username'] }}")
+                {
+                    contain+=`<button class='delete_cmt_article btn btn-default' key='${cmt[el].id}'>删除评论</button>`
+                }
+                        }
+                        }
+                        $('.showCmt').append(contain);
+                    }
+                })
+            }
+        })
+
+        $(document).on('click', '.delete_cmt_article', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete_cmt/',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key'),"obj_type":"article"}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+    })
+    </script>
+    {% endif %}
+
+    {#    如果存在用户音乐评论 则显示音乐评论#}
+    {% if musicId %}
+    <script>
+    $(document).ready(function(){
+        console.log({{ musicId }})
+        var page=0
+        $(window).scroll(function () {
+            if ($(window).scrollTop()==($(document).height() - $(window).height()))
+            {
+                $.ajax({
+                    url:'/get_cmt_music/'+{{ musicId }},
+                    type:'POST',
+                    data:JSON.stringify({"page":page}),
+                    success:function (result) {
+                        console.log(result,page)
+                        if (result!=''){
+                            page+=5
+                        console.log(this.url)
+                        var cmt = JSON.parse(result)
+                        console.log(cmt)
+                        var contain=''
+                        for(var el in cmt){
+                            contain+=`<div class="media">
+<div class="media-left">
+<img src=${cmt[el].com_icon} style="width:100px;height:100px">
+</div>
+<div class="media-body">
+    <div class="name" style="margin-bottom:20px">${cmt[el].com_name}</div>
+    <div class="show" style="margin-bottom:20px">${cmt[el].cmt_cont}</div>
+    <div class="date" style="margin-bottom:20px">${cmt[el].create_date}</div>
+</div>
+</div>`
+                            if (cmt[el].cmt_user=="{{ session['username'] }}")
+                {
+                    contain+=`<button class='delete_cmt_music btn btn-default' key='${cmt[el].id}'>删除评论</button>`
+                }
+                        }
+                        }
+                        $('.showCmt').append(contain);
+                    }
+                })
+            }
+        })
+    })
+    $(document).on('click', '.delete_cmt_music', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete_cmt/',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key'),"obj_type":"music"}),
+                    success: function (result) {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+    </script>
+    {% endif %}
+
+
+{% endblock %}

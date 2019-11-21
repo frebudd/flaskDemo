@@ -1,0 +1,42 @@
+{% extends "navbase.html" %}
+{% block title %}
+    UpdateInfomation
+{% endblock %}
+
+{% block body %}
+    {{ super() }}
+    <div style="margin: 0 auto;width: fit-content">
+        <form method="post"  role="form" style="width: 300px;"  enctype="multipart/form-data">
+            {{ form.csrf_token() }}
+            <div class="form-group">
+            {{ form.name.label }}{{ form.name(class="form-control", placeholder="请输入社区名称") }}
+            </div>
+            <div class="form-group">
+            {{ form.password.label }}{{ form.password(class="form-control", placeholder="请输入密码") }}
+            </div>
+            <div class="form-group">
+            {{ form.password2.label }}{{ form.password2(class="form-control", placeholder="请再次输入密码") }}
+            </div>
+            <div class="form-group form-control" >
+                <input type="radio" value="男" name="sex">男
+                <input type="radio" value="女" name="sex">女
+            </div>
+            <div class="form-group ">
+                {{ form.introduction.label }}{{ form.introduction(class="form-control") }}
+            </div>
+            <div class="form-group">
+                上传头像：{{ form.headurl }}
+            </div>
+            <div class="form-group">
+            {{ form.submitU(class="form-control") }}
+            </div>
+
+
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-info">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,726 @@
+{% extends "navbase.html" %}
+{% block title %}
+    Admin
+{% endblock %}
+{% block content %}
+
+    {% for message in get_flashed_messages() %}
+<div class="alert alert-info alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                &times;
+            </button>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+
+
+    <div class="coll" style="margin:0 auto;width: 800px;">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"
+                   href="#collapseOne">
+                    管理员爬虫采集信息
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="form-group">
+                    爬取名著网文章：<input type="text" class="form-control" id="add_article" placeholder="请输入网址 例：http://t.icesmall.cn/bookDir/2/335/0.html">
+                    <input type="button" class="form-control" id="btn_article" value="添加">
+                </div>
+{#                添加音乐：<input type="text" class="form-control" id="add_music" placeholder="请输入网址">#}
+{#                <input type="button" class="form-control" id="btn_music" value="添加">#}
+                爬取知乎图片：<input type="text" class="form-control" id="add_photo" placeholder="请输入网址 例：https://www.zhihu.com/question/314609358/answer/831214467">
+                <input type="button" class="form-control" id="btn_photo" value="添加">
+            </div>
+        </div>
+
+
+
+{#        查询信息栏#}
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">信息发布管理</a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#music_info" id="music" data-toggle="collapse" data-parent="#accordion">音乐模块信息</a>
+                    </h4>
+                </div>
+                <div id="music_info" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <caption>音乐模块信息</caption>
+                        <table  class="table table-striped">
+                            <tbody id="table_music"></tbody>
+
+                        </table>
+                        <div class="page_music"></div>
+                    </div>
+                </div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#article_info" id="article" data-toggle="collapse" data-parent="#accordion">文章模块信息</a>
+                    </h4>
+                </div>
+                <div id="article_info" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <caption>文章模块信息</caption>
+                        <table  class="table table-striped">
+                            <tbody id="table_article"></tbody>
+
+                        </table>
+                        <div class="page_article"></div>
+                    </div>
+                </div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#photo_info" id="photo" data-toggle="collapse" data-parent="#accordion">图片模块信息</a>
+                    </h4>
+                </div>
+                <div id="photo_info" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <caption>图片模块信息</caption>
+                        <table  class="table table-striped">
+                            <tbody id="table_photo" ></tbody>
+                        </table>
+                        <div class="page_photo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+{#    用户评论管理#}
+            <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion"
+                   href="#collapse_thr">
+                    用户评论管理
+                </a>
+            </h4>
+        </div>
+        <div id="collapse_thr" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="form-group">
+
+            <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" id="cmt_pic" href="#collapse_pic">
+                    用户图片评论管理
+                </a>
+            </h4>
+        </div>
+        <div id="collapse_pic" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="form-group">
+                                            <table  class="table table-striped">
+                            <tbody id="table_photo_cmt" ></tbody>
+                        </table>
+                        <div class="page_photo_cmt"></div>
+            </div>
+        </div>
+    </div>
+
+                                <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse_art" id="cmt_article">
+                    用户文章评论管理
+                </a>
+            </h4>
+        </div>
+        <div id="collapse_art" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="form-group">
+                                                                <table  class="table table-striped">
+                            <tbody id="table_article_cmt" ></tbody>
+                        </table>
+                        <div class="page_article_cmt"></div>
+            </div>
+        </div>
+    </div>
+
+                                <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" id="cmt_music" href="#collapse_mus">
+                    用户音乐评论管理
+                </a>
+            </h4>
+        </div>
+        <div id="collapse_mus" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="form-group">
+                                                                                    <table  class="table table-striped">
+                            <tbody id="table_music_cmt" ></tbody>
+                        </table>
+                        <div class="page_music_cmt"></div>
+            </div>
+        </div>
+    </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+{#    管理用户#}
+    <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" id="user" href="#collapse_user">
+                    用户信息管理
+                </a>
+            </h4>
+        </div>
+        <div id="collapse_user" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="form-group">
+                    用户信息
+                    <table  class="table table-striped">
+                            <tbody id="user_info" ></tbody>
+                        </table>
+                        <div class="page_user_info"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+
+            {#封装ajax查询音乐#}
+            var page_music = 0
+
+            function ajax_music() {
+                $.ajax({
+                    url: '/music/' + page_music,
+                    success: function (result) {
+                        var contain_music = `                            <tr>
+                                <th>id</th>
+                                <th>title</th>
+                                <th>musAddr</th>
+                                <th>createDate</th>
+                                <th>username</th>
+                                <th>operation</th>
+                            </tr>`
+                        console.log(result)
+                        var music_info = JSON.parse(result)
+                        for (var el in music_info) {
+                            contain_music += `
+<tr><td>${music_info[el].id}</td>
+<td>${music_info[el].music_title}</td>
+<td>${music_info[el].musAddr}</td>
+<td>${music_info[el].createDate}</td>
+<td>${music_info[el].user_name}</td>
+<td><button class="delete_music btn btn-default" key="${music_info[el].id}">删除</button></td>
+</tr>`
+                        }
+                        $('#table_music').html(contain_music)
+                        $('.page_music').html(`<ul class="pagination">
+    <li><a href="#" id='Mlast_page'>&laquo;</a></li>
+    <li><a href="#" id='Mnext_page'>&raquo;</a></li>
+</ul>`)
+                    }
+                })
+            }
+
+            {#音乐分页#}
+            $(document).on('click', '#Mlast_page', function () {
+                page_music = page_music - 5;
+                if (page_music <= 0) {
+                    page_music = 0
+                }
+                ajax_music()
+            })
+            $(document).on('click', '#Mnext_page', function () {
+                page_music = page_music + 3
+                ajax_music()
+
+            })
+            {#音乐查询信息#}
+            $("#music").click(ajax_music())
+
+
+            {#封装ajax查询文章#}
+            var page_article = 0
+
+            function ajax_article() {
+                var mark = 'admin_ajax'
+                $.ajax({
+                    url: '/article/' + page_article,
+                    type: 'POST',
+                    data: JSON.stringify({"mark": mark}),
+                    success: function (result) {
+                        var contain_article = `                            <tr>
+                                <th>id</th>
+                                <th>art_cont</th>
+                                <th>art_addr</th>
+                                <th>createDate</th>
+                                <th>user_name</th>
+                                <th>operation</th>
+                            </tr>`
+                        console.log(result)
+                        var article_info = JSON.parse(result);
+                        $('#table_article').empty();
+                        for (var el in article_info) {
+                            contain_article += `
+<tr>
+<td>${article_info[el].id}</td>
+<td>${article_info[el].art_cont}</td>
+<td>${article_info[el].art_addr}</td>
+<td>${article_info[el].createDate}</td>
+<td>${article_info[el].user_name}</td>
+<td><button class="delete_article btn btn-default" key="${article_info[el].id}">删除</button></td>
+</tr>`
+
+                        }
+                        $('#table_article').html(contain_article)
+                        $('.page_article').html(`<ul class="pagination">
+    <li><a href="#" id='last_page'>&laquo;</a></li>
+    <li><a href="#" id='next_page'>&raquo;</a></li>
+</ul>`)
+                    }
+                })
+            }
+
+            {#文章查询信息#}
+            $("#article").click(ajax_article())
+            {#文章分页#}
+            $(document).on('click', '#last_page', function () {
+                page_article = page_article - 3;
+                if (page_article <= 0) {
+                    page_article = 0
+                }
+                ajax_article()
+                console.log(page_article)
+            })
+            $(document).on('click', '#next_page', function () {
+                page_article = page_article + 3
+                ajax_article()
+                console.log(page_article)
+            })
+
+
+            var page_photo = 0
+            {#封装查询照片#}
+            function ajax_photo() {
+                $.ajax({
+                    url: '/photo/' + page_photo,
+
+                    success: function (result) {
+                        var contain_photo = `                            <tr>
+                                <th>id</th>
+                                <th>title</th>
+                                <th>phoAddr</th>
+                                <th>createDate</th>
+                                <th>username</th>
+                                <th>operation</th>
+                            </tr>`
+                        console.log(result)
+                        var photo_info = JSON.parse(result)
+                        for (var el in photo_info) {
+                            contain_photo += `
+<tr><td>${photo_info[el].id}</td>
+<td>${photo_info[el].title}</td>
+<td>${photo_info[el].phoAddr}</td>
+<td>${photo_info[el].createDate}</td>
+<td>${photo_info[el].user_name}</td>
+<td><button class="delete_photo btn btn-default" key="${photo_info[el].id}">删除</button></td>
+</tr>`
+                        }
+                        $('#table_photo').html(contain_photo)
+                        $('.page_photo').html(`<ul class="pagination">
+    <li><a href="#" id='Plast_page'>&laquo;</a></li>
+    <li><a href="#" id='Pnext_page'>&raquo;</a></li>
+</ul>`)
+                    }
+                })
+            }
+
+            {#照片查询信息#}
+            $("#photo").click(ajax_photo())
+            {#照片分页#}
+            $(document).on('click', '#Plast_page', function () {
+                page_photo = page_photo - 5;
+                if (page_photo <= 0) {
+                    page_photo = 0
+                }
+                ajax_photo()
+                console.log(page_photo)
+            })
+            $(document).on('click', '#Pnext_page', function () {
+                page_photo = page_photo + 5
+                ajax_photo()
+                console.log(page_photo)
+            })
+
+
+            {#ajax删除文章#}
+            $(document).on('click', '.delete_article', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete/' + 'article_info',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key')}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+            {#ajax删除照片#}
+            $(document).on('click', '.delete_photo', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete/' + 'photo',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key')}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+            {#ajax删除音乐#}
+            $(document).on('click', '.delete_music', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete/' + 'music',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key')}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+            {#添加文章#}
+            $('#btn_article').click(function () {
+                var add_article = $('#add_article').val()
+                console.log(add_article)
+                alert("正在爬取信息，请稍等")
+                $.ajax({
+                    url: '/add_obj',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_data": add_article, "obj_type": 'article'})
+                    success:function () {
+                        alert("爬取成功")
+                    }
+                })
+            })
+
+            {#添加音乐#}
+            $('#btn_music').click(function () {
+                var add_music = $('#add_music').val()
+                alert("正在爬取信息，请稍等")
+                $.ajax({
+                    url: '/add_obj',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_data": add_music, "obj_type": 'music'})
+                    success:function () {
+                        alert("爬取成功")
+                    }
+                })
+            })
+
+            {#添加照片#}
+            $('#btn_photo').click(function () {
+                var add_photo = $('#add_photo').val()
+                alert("正在爬取信息，请稍等")
+                $.ajax({
+                    url: '/add_obj',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_data": add_photo, "obj_type": 'photo'})
+                    success:function () {
+                        alert("爬取成功")
+                    }
+                })
+            })
+
+
+            {#查询用户图片评论#}
+            var page_pic_cmt = 0
+            function ajax_photo_cmt() {
+                $.ajax({
+                    url: '/admin_pic_cmt/' + page_pic_cmt,
+                    type:'POST',
+                    data:JSON.stringify({"cmt_type":"pic"}),
+                    success: function (result) {
+                        var contain_photo_cmt = `                            <tr>
+                                <th>id</th>
+                                <th>图片ID</th>
+                                <th>评论内容</th>
+                                <th>评论日期</th>
+                                <th>评论者</th>
+                                <th>操作</th>
+                            </tr>`
+                        console.log(result)
+                        var photo_cmt = JSON.parse(result)
+                        for (var el in photo_cmt) {
+                            contain_photo_cmt += `
+<tr><td>${photo_cmt[el].id}</td>
+<td>${photo_cmt[el].pic_id}</td>
+<td>${photo_cmt[el].cmt_cont}</td>
+<td>${photo_cmt[el].date}</td>
+<td>${photo_cmt[el].cmt_user}</td>
+<td><button class="delete_cmt btn btn-default" key="${photo_cmt[el].id}">删除</button></td>
+</tr>`
+                        }
+                        $('#table_photo_cmt').html(contain_photo_cmt)
+                        $('.page_photo_cmt').html(`<ul class="pagination">
+    <li><a href="#" id='Pclast_page'>&laquo;</a></li>
+    <li><a href="#" id='Pcnext_page'>&raquo;</a></li>
+</ul>`)
+                    }
+                })
+            }
+
+            $("#cmt_pic").click(ajax_photo_cmt())
+                        {#照片评论分页#}
+            $(document).on('click', '#Pclast_page', function () {
+                page_pic_cmt = page_pic_cmt - 5;
+                if (page_pic_cmt <= 0) {
+                    page_pic_cmt = 0
+                }
+                ajax_photo_cmt()
+                console.log(page_pic_cmt)
+            })
+            $(document).on('click', '#Pcnext_page', function () {
+                page_pic_cmt = page_pic_cmt + 5
+                ajax_photo_cmt()
+                console.log(page_pic_cmt)
+            })
+
+                        {#ajax删除评论#}
+            $(document).on('click', '.delete_cmt', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete_cmt/',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key'),"obj_type":"pic"}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+
+
+
+{#查询用户文章评论#}
+            var page_article_cmt = 0
+            function ajax_article_cmt() {
+                $.ajax({
+                    url: '/admin_pic_cmt/' + page_article_cmt,
+                    type:'POST',
+                    data:JSON.stringify({"cmt_type":"article"}),
+                    success: function (result) {
+                        var contain_article_cmt = `                            <tr>
+                                <th>id</th>
+                                <th>文章ID</th>
+                                <th>评论内容</th>
+                                <th>评论日期</th>
+                                <th>评论者</th>
+                                <th>操作</th>
+                            </tr>`
+                        console.log(result)
+                        var article_cmt = JSON.parse(result)
+                        for (var el in article_cmt) {
+                            contain_article_cmt += `
+<tr><td>${article_cmt[el].id}</td>
+<td>${article_cmt[el].article_id}</td>
+<td>${article_cmt[el].cmt_cont}</td>
+<td>${article_cmt[el].date}</td>
+<td>${article_cmt[el].cmt_user}</td>
+<td><button class="delete_cmt_article btn btn-default" key="${article_cmt[el].id}">删除</button></td>
+</tr>`
+                        }
+                        $('#table_article_cmt').html(contain_article_cmt)
+                        $('.page_article_cmt').html(`<ul class="pagination">
+    <li><a href="#" id='Aclast_page'>&laquo;</a></li>
+    <li><a href="#" id='Acnext_page'>&raquo;</a></li>
+</ul>`)
+                    }
+                })
+            }
+
+                        $("#cmt_article").click(ajax_article_cmt())
+                        {#文章评论分页#}
+            $(document).on('click', '#Aclast_page', function () {
+                page_article_cmt = page_article_cmt - 5;
+                if (page_article_cmt <= 0) {
+                    page_article_cmt = 0
+                }
+                ajax_article_cmt()
+                console.log(page_article_cmt)
+            })
+            $(document).on('click', '#Acnext_page', function () {
+                page_article_cmt = page_article_cmt + 5
+                ajax_article_cmt()
+                console.log(page_article_cmt)
+            })
+
+                                    {#ajax删除文章评论#}
+            $(document).on('click', '.delete_cmt_article', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete_cmt/',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key'),"obj_type":"article"}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+
+
+            {#查询用户音乐评论#}
+            var page_music_cmt = 0
+            function ajax_music_cmt() {
+                $.ajax({
+                    url: '/admin_pic_cmt/' + page_music_cmt,
+                    type:'POST',
+                    data:JSON.stringify({"cmt_type":"music"}),
+                    success: function (result) {
+                        console.log('success')
+                        var contain_music_cmt = `
+<tr>
+                                <th>id</th>
+                                <th>音乐ID</th>
+                                <th>评论内容</th>
+                                <th>评论日期</th>
+                                <th>评论者</th>
+                                <th>操作</th>
+                            </tr>`
+                        console.log(result)
+                        var music_cmt = JSON.parse(result)
+                        for (var el in music_cmt) {
+                            contain_music_cmt += `
+<tr><td>${music_cmt[el].id}</td>
+<td>${music_cmt[el].music_id}</td>
+<td>${music_cmt[el].cmt_cont}</td>
+<td>${music_cmt[el].create_date}</td>
+<td>${music_cmt[el].cmt_user}</td>
+<td><button class="delete_cmt_music btn btn-default" key="${music_cmt[el].id}">删除</button></td>
+</tr>`
+                        }
+                        $('#table_music_cmt').html(contain_music_cmt)
+                        $('.page_music_cmt').html(`<ul class="pagination">
+    <li><a href="#" id='Mclast_page'>&laquo;</a></li>
+    <li><a href="#" id='Mcnext_page'>&raquo;</a></li>
+</ul>`)
+                    }
+                })
+            }
+            $("#cmt_music").click(ajax_music_cmt())
+               {#音乐评论分页#}
+            $(document).on('click', '#Mclast_page', function () {
+                page_music_cmt = page_music_cmt - 5;
+                if (page_music_cmt <= 0) {
+                    page_music_cmt = 0
+                }
+                ajax_music_cmt()
+                console.log(page_music_cmt)
+            })
+            $(document).on('click', '#Mcnext_page', function () {
+                page_music_cmt = page_music_cmt + 5
+                ajax_music_cmt()
+                console.log(page_music_cmt)
+            })
+
+
+                                                {#ajax删除音乐评论#}
+            $(document).on('click', '.delete_cmt_music', function (e) {
+                console.log($(this).attr('key'))
+                $.ajax({
+                    url: '/delete_cmt/',
+                    type: 'POST',
+                    data: JSON.stringify({"obj_id": $(this).attr('key'),"obj_type":"music"}),
+                    success: function (result) {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+
+
+
+            {#用户信息管理#}
+            var user_page=0
+            function user_info(){
+                $.ajax({
+                    url:'/user_info/'+ user_page,
+                    success:function (result) {
+                        var contain_user=`
+                        <tr>
+                                <th>用户ID/th>
+                                <th>用户账号</th>
+                                <th>社区名</th>
+                                <th>密码</th>
+                                <th>性别</th>
+                                <th>用户头像</th>
+                                <th>用户签名</th>
+                                <th>操作</th>
+                            </tr>\`
+                        `
+                        var user_info=JSON.parse(result)
+                        for (var el in user_info) {
+                            contain_user += `
+<tr><td>${user_info[el].id}</td>
+<td>${user_info[el].username}</td>
+<td>${user_info[el].name}</td>
+<td>${user_info[el].password}</td>
+<td>${user_info[el].sex}</td>
+<td>${user_info[el].headurl}</td>
+<td>${user_info[el].introduction}</td>
+<td><button class="delete_user_info btn btn-default" key="${user_info[el].id}">删除</button></td>
+</tr>`
+                        }
+                        $('#user_info').html(contain_user)
+                        $('.page_user_info').html(`<ul class="pagination">
+    <li><a href="#" id='Uclast_page'>&laquo;</a></li>
+    <li><a href="#" id='Ucnext_page'>&raquo;</a></li>
+</ul>`)
+                    }
+                })
+            }
+
+            $("#user").click(user_info())
+               {#音乐评论分页#}
+            $(document).on('click', '#Uclast_page', function () {
+                user_page = user_page - 5;
+                if (user_page <= 0) {
+                    user_page = 0
+                }
+                user_info()
+                console.log(user_page)
+            })
+            $(document).on('click', '#Ucnext_page', function () {
+                user_page = user_page + 5
+                user_info()
+                console.log(user_page)
+            })
+
+        {#    删除用户#}
+            $(document).on('click','.delete_user_info',function () {
+                $.ajax({
+                    url:'/user_delete',
+                    type:'POST',
+                    data:JSON.stringify({"user_id": $(this).attr('key')}),
+                    success: function () {
+                        alert("操作成功")
+                        window.location.reload()
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock %}

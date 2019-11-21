@@ -1,0 +1,39 @@
+{% extends "navbase.html" %}
+{% block title %}
+    Register
+{% endblock %}
+
+
+{% block content %}
+{% if  form %}
+{#    div居中要设置宽度#}
+<div style="margin: 0 auto;width: fit-content">
+    <form method="post"  style="width: 300px;" enctype="multipart/form-data">
+        {{form.csrf_token()}}
+        <div class="form-group">
+        {{ form.username.label }}{{ form.username(class="form-control", placeholder="请输入用户名") }}
+        </div>
+        <div class="form-group">
+        {{ form.name.label }}{{ form.name(class="form-control", placeholder="请输入社区名称") }}
+        </div>
+        <div class="form-group">
+        {{ form.password.label }}{{ form.password(class="form-control", placeholder="请输入密码") }}
+        </div>
+        <div class="form-group">
+        {{ form.password2.label }}{{ form.password2(class="form-control", placeholder="请确认密码") }}
+        </div>
+        <div class="form-group">
+        {{ form.submitR(class="form-control") }}
+        </div>
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-info">
+        {{ message }}
+            </div>
+
+    {% endfor %}
+    </form>
+
+    </div>
+{% endif %}
+
+{% endblock %}
